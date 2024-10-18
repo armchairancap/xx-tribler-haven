@@ -1,5 +1,5 @@
 import { triblerService } from "@/services/tribler.service";
-import { DownloadIcon, ExclamationTriangleIcon, GearIcon, StarIcon } from "@radix-ui/react-icons";
+import { ChatBubbleIcon, DownloadIcon, ExclamationTriangleIcon, GearIcon, StarIcon } from "@radix-ui/react-icons";
 import { IconProps } from "@radix-ui/react-icons/dist/types";
 
 type IconType = React.ForwardRefExoticComponent<IconProps & React.RefAttributes<SVGSVGElement>>
@@ -20,7 +20,6 @@ interface NavItemWithChildren extends NavItem {
 }
 
 export const sideMenu: NavItemWithChildren[] = [
-
     {
         title: 'Downloads',
         icon: DownloadIcon,
@@ -51,6 +50,11 @@ export const sideMenu: NavItemWithChildren[] = [
         title: 'Popular',
         icon: StarIcon,
         to: '/popular',
+    },
+    {
+        title: 'Chat',
+        icon: ChatBubbleIcon,
+        to: '/chat',
     },
     {
         title: 'Settings',

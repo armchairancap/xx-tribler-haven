@@ -7,6 +7,8 @@ import NoMatch from "./pages/NoMatch";
 import Dashboard from "./pages/Dashboard";
 import Downloads from "./pages/Downloads";
 import Search from "./pages/Search";
+// AA: import Chat
+import Chat from "./pages/Chat";
 import Popular from "./pages/Popular";
 import GeneralSettings from "./pages/Settings/General";
 import Connection from "./pages/Settings/Connection";
@@ -33,6 +35,8 @@ function ErrorBoundary() {
   return <div>The GUI crashed beyond repair. Please report the error and refresh the page.</div>;
 }
 
+
+
 export const router = createHashRouter([
     {
         path: "/",
@@ -47,6 +51,10 @@ export const router = createHashRouter([
                 path: "popular",
                 element: <Popular />,
             },
+            {
+                path: "chat",
+                element: <Chat />,
+            },            
             {
                 path: "search",
                 element: <Search />,
