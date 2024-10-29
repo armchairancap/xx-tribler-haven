@@ -1,5 +1,6 @@
 - [xx Network Haven - Tribler Proof-of-Concept](#xx-network-haven---tribler-proof-of-concept)
   - [Haven with Tribler iFrame (v2)](#haven-with-tribler-iframe-v2)
+    - [Run in Docker](#run-in-docker)
   - [Tribler with Haven iFrame (v1)](#tribler-with-haven-iframe-v1)
   - [How to run this thing](#how-to-run-this-thing)
   - [Other information](#other-information)
@@ -13,6 +14,7 @@
     - [Notifications (v1)](#notifications-v1)
     - [iFrame (v2, v1)](#iframe-v2-v1)
   - [Additional information](#additional-information)
+  - [License](#license)
 
 
 ## xx Network Haven - Tribler Proof-of-Concept
