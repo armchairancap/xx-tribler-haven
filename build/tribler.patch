@@ -1,0 +1,15 @@
+# Note: this patch is licensed under the GPL 3.0 license - the same as Tribler itself. (c) 2024 @armchairancap
+--- ../../src/tribler/core/restapi/rest_manager.py	2024-10-28 14:53:58.489067797 +0800
++++ ../../../tribler-source/src/tribler/core/restapi/rest_manager.py	2024-10-28 15:57:34.343829406 +0800
+@@ -89,8 +89,10 @@
+     def authenticate(self, request: Request) -> bool:
+         """
+         Is the given request authenticated using an API key.
++        Skips checks for requests to the documentation, static files, or the UI, and also for localhost or the haven domain.
+         """
+-        if any(request.path.startswith(path) for path in ["/docs", "/static", "/ui"]):
++        if any(request.path.startswith(path) for path in ["/docs", "/static", "/ui"]) or request.remote != "127.0.0.1" or request.host != 'haven':
++            print("===> Request host and IP: ", request.host, request.remote)
+             return True
+         # The api key can either be in the headers or as part of the url query
+         api_key = request.headers.get("X-Api-Key") or request.query.get("key") or request.cookies.get("api_key")

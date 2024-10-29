@@ -1,0 +1,51 @@
+# libtorrent-1.2.19 does not support python 3.11 yet
+FROM python:3.10-slim
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends libsodium23=1.0.18-1 patch tzdata \
+    && rm -rf /var/lib/apt/lists/*
+
+## AA: container time in UTC
+ENV TZ="Europe/London"
+
+# Install Xvfb for headless GUI
+RUN apt-get update -y \
+  && apt-get -y install \
+    xvfb nodejs npm git \
+  && rm -rf /var/lib/apt/lists/* /var/cache/apt/*
+
+# Set up a user in the container
+RUN useradd -ms /bin/bash --home-dir /home/user user
+USER user
+
+# Clone the repository with arguments
+ARG GIT_REPO=${GIT_REPO:-"https://github.com/tribler/tribler.git"}
+ARG GIT_BRANCH=${GIT_BRANCH:-"main"}
+RUN echo "Cloning $GIT_REPO on branch $GIT_BRANCH"
+RUN git clone --recursive --branch "$GIT_BRANCH" "$GIT_REPO" /home/user/tribler
+
+# AA: Commit up to which we patch; https://github.com/Tribler/tribler/commit/8319fb9c63ff257c9afbce3cb8c59333642fbec3
+ARG GIT_COMMIT_SHA="8319fb9c63ff257c9afbce3cb8c59333642fbec3"
+# AA: patch Tribler to allow access from localhost (127.0.0.1) and haven
+# AA: switch to working directory /home/user/tribler
+WORKDIR /home/user/tribler
+ADD haven-tribler.patch /home/user/tribler/haven-tribler.patch
+RUN git reset --hard ${GIT_COMMIT_SHA}
+RUN cd /home/user/tribler/src/tribler/core/restapi/ && patch --backup-if-mismatch /home/user/tribler/src/tribler/core/restapi/rest_manager.py /home/user/tribler/haven-tribler.patch
+# RUN cp /home/user/tribler/src/tribler/core/restapi/rest_manager.py /home/user/tribler/src/tribler/core/restapi/rest_manager.py.bkp
+RUN md5sum /home/user/tribler/src/tribler/core/restapi/rest_manager.py
+
+# Install NPM dependencies
+WORKDIR /home/user/tribler/src/tribler/ui
+RUN npm install \
+    && npm run build
+
+# Install Python dependencies
+WORKDIR /home/user/tribler
+RUN pip3 install -r requirements.txt
+
+# Set IPv8 on pythonpath
+ENV PYTHONPATH=pyipv8
+
+# Run the application using Xvfb
+CMD xvfb-run python3 src/run_tribler.py

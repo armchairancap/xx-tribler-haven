@@ -1,4 +1,0 @@
-include src/run_tribler.py
-recursive-include src/tribler/gui/qt_resources *
-recursive-include src/tribler/gui/images *
-include requirements*.txt

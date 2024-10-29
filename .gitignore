@@ -22,3 +22,5 @@ build/debian/tribler/debian/tribler.substvars
 build/debian/tribler/debian/tribler/
 build/debian/tribler/usr/share/tribler/
 build/debian/tribler_*
+
+*.zip

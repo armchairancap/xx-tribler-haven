@@ -1,0 +1,18 @@
+--- src/layouts/DefaultLayout/DefaultLayout.tsx	2024-10-29 14:49:27.496634746 +0800
++++ patched-DefaultLayout.tsx	2024-10-29 14:52:15.467656168 +0800
+@@ -94,6 +94,14 @@
+                   {(sidebarView === 'spaces' || sidebarView === 'dms') && <>{children}</>}
+                 </div>
+                 <RightSideBar />
++                <div>
++                  <iframe
++                    src='http://127.0.0.1:3100/'
++                    className='w-full h-full border-none'
++                    title='Tribler UI'
++                    sandbox='allow-scripts allow-same-origin'
++                  />
++                </div>
+               </div>
+             </div>
+           </div>
+
