@@ -5,8 +5,9 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends libsodium23=1.0.18-1 patch tzdata \
     && rm -rf /var/lib/apt/lists/*
 
-## AA: container time in UTC
-ENV TZ="Europe/London"
+# AA: Set the timezone to London
+ENV TZ="Europe/London" \
+    DEBIAN_FRONTEND=noninteractive
 
 # Install Xvfb for headless GUI
 RUN apt-get update -y \
@@ -27,13 +28,9 @@ RUN git clone --recursive --branch "$GIT_BRANCH" "$GIT_REPO" /home/user/tribler
 # AA: Commit up to which we patch; https://github.com/Tribler/tribler/commit/8319fb9c63ff257c9afbce3cb8c59333642fbec3
 ARG GIT_COMMIT_SHA="8319fb9c63ff257c9afbce3cb8c59333642fbec3"
 # AA: patch Tribler to allow access from localhost (127.0.0.1) and haven
-# AA: switch to working directory /home/user/tribler
 WORKDIR /home/user/tribler
-ADD haven-tribler.patch /home/user/tribler/haven-tribler.patch
-RUN git reset --hard ${GIT_COMMIT_SHA}
-RUN cd /home/user/tribler/src/tribler/core/restapi/ && patch --backup-if-mismatch /home/user/tribler/src/tribler/core/restapi/rest_manager.py /home/user/tribler/haven-tribler.patch
-# RUN cp /home/user/tribler/src/tribler/core/restapi/rest_manager.py /home/user/tribler/src/tribler/core/restapi/rest_manager.py.bkp
-RUN md5sum /home/user/tribler/src/tribler/core/restapi/rest_manager.py
+ADD tribler.patch /home/user/tribler/tribler.patch
+RUN git reset --hard ${GIT_COMMIT_SHA} && cd /home/user/tribler/src/tribler/core/restapi/ && patch --backup-if-mismatch /home/user/tribler/src/tribler/core/restapi/rest_manager.py /home/user/tribler/tribler.patch
 
 # Install NPM dependencies
 WORKDIR /home/user/tribler/src/tribler/ui

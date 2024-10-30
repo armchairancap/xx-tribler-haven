@@ -46,7 +46,34 @@ What does this entail? Just two patches from this repo:
 
 #### Run in Docker
 
-This isn't ready yet, but you can get the idea by checking the build directory and the Dockerfile patch for Tribler. For Haven, use the same Docker compose recipes I have published.
+This isn't completely ready yet, but you may build the two containers by yourself like this:
+
+```sh
+cd build/haven
+docker build -t haven-for-tribler:latest .
+cd ../tribler
+docker build -t tribler-haven:latest .
+cd ../../
+```
+
+Or you can do `cd build && ./build.sh` (which does the same thing).
+
+This creates two container images which I reference in the sample compose.yaml:
+
+```sh
+$ docker images
+REPOSITORY           TAG         IMAGE ID       CREATED          SIZE
+tribler-haven        latest      8693940f6d6f   9 minutes ago    1.39GB
+haven-for-tribler    latest      d637b742a675   14 minutes ago   2.67GB
+```
+
+There's a sample Docker compose file in the build/tribler directory. 
+
+By default - and the patch for Haven has that hardcoded - Tribler API port should be 3100 and the password 'changeme'. In this PoC that's hard-coded into the Haven patch, so if you want to change these you may edit the patches and Docker compose to match whatever password you set and port you want to use. 
+
+If you decide to change the API key, for example, you can do it in Tribler, then change compose.yaml, change the API key in it, change it in the Haven patch, and rebuild Haven container. I think that should be enough.
+
+For more advanced Docker compose scenarios (TLS, reverse proxy, etc.) you can consider Docker compose recipes I have published (see the Resources section).
 
 ### Tribler with Haven iFrame (v1)
 
@@ -93,7 +120,7 @@ To ease copy-paste or indeed, make it possible to not use a patched version of H
 
 ![Magnet download add-on for Firefox](./xx_screenshot_haven_with_firefox_add-on.png)
 
-The add-on can be used with any Haven and Tribler instances, but in v1.0 all options are hard-coded.
+The add-on can be used with any Haven and Tribler instances, but in v1.0 **of add-on** all options are hard-coded in the add-on itself (see the add-on repo). If you change Tribler port or API key (explained above), then you'll have to change the same options in  this extension.
 
 #### Example workflow
 
@@ -159,6 +186,14 @@ This is no different from regular Haven, but Tribler users may forget to do it. 
 It appears those don't work because of default iFrame security settings. 
 
 This could be worked around, but I haven't tried it.
+
+#### Security (v2)
+
+In v2 Tribler allows unauthenticated access to port 3100 from 127.0.0.1 and `haven`, which is a small compromise that I found reasonable for this PoC.
+
+If you want to share Haven to other users, though, remember they will have access to the same Tribler instance, so do not share the same Haven to friends or family if that's not what you intend. You can easily create additional containerized Haven instances for them - just use my generic containerized Haven recipe (see Resources) to provide access to shared unpatched Haven server over TLS to port 443, and you'll be fine.
+
+Also keep in mind that Tribler doesn't authenticate localhost users, so other users on the same computer could access Tribler's Web UI directly the same as you, by using the default API key ('changeme'). How to change that is described in How to Run (above).
 
 #### iFrame (v2, v1)
 
