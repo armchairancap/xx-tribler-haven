@@ -3,7 +3,6 @@
     - [Run in Docker](#run-in-docker)
     - [Run outside of Docker](#run-outside-of-docker)
   - [Tribler with Haven iFrame (v1)](#tribler-with-haven-iframe-v1)
-  - [How to run this thing](#how-to-run-this-thing)
   - [Other information](#other-information)
     - [Tor- and VPN-free experience](#tor--and-vpn-free-experience)
     - [Simplify copy-paste operations](#simplify-copy-paste-operations)
@@ -23,8 +22,8 @@
 
 This repository contains several "proof-of-concept" ideas for xx Network Haven and Tribler integrations.
 
-- [v2](https://github.com/armchairancap/xx-tribler-haven/releases) - Haven chat with Tribler iFrame (**WIP** in `master` branch, later will become v2.0)
-- [v1](https://github.com/armchairancap/xx-tribler-haven/releases/tag/v1.0) - Tribler with Haven chat iFrame (source code in [Release v1.0](https://github.com/armchairancap/xx-tribler-haven/releases/tag/v1.0))
+- [v2](https://github.com/armchairancap/xx-tribler-haven/releases) - Haven chat with a Tribler iFrame
+- [v1](https://github.com/armchairancap/xx-tribler-haven/releases/tag/v1.0) - Tribler with a Haven chat iFrame (source code in [Release v1.0](https://github.com/armchairancap/xx-tribler-haven/releases/tag/v1.0))
 
 v2 is probably more interesting to general users. [This post](https://armchairancap.github.io/blog/2024/10/29/xx-haven-with-tribler#what-integrations-and-why) talks about some advantages and disadvantages of each approach as I see them.
 
@@ -114,11 +113,7 @@ What does this involve?
 - Patch Tribler menus to add link to Chat page
 - Add a page with xx Network iFrame (localhost or haven.xx.network or other)
 
-### How to run this thing
-
-**v2** takes an easier approach: download Haven and Tribler, apply the patches from the build directory and run. 
-
-**v1** is a bit painful. Download release v1.0, and work on building Tribler from source, then run it. Haven doesn't have to be patched so it can be simply used from https://haven.xx.network or started locally (remember to modify the iFrame URL).
+**v1** is a bit painful to run. Download release v1.0, work on building Tribler from the source, then run it. Haven doesn't have to be patched so it can be simply used from https://haven.xx.network or locally (remember to modify the iFrame URL in Tribler to point it to http://localhost:3000 or such).
 
 ### Other information
 
@@ -236,7 +231,6 @@ Other ways:
 - [Developer section of the xx Network Web site](https://xx.network/developers-blockchain/)
 
 - You can talk to xx Network community and developers in [General Chat on Haven](https://haven.xx.network/join?0Name=xxGeneralChat&1Description=Talking+about+the+xx+network&2Level=Public&3Created=1674152234202224215&e=%2FqE8BEgQQkXC6n0yxeXGQjvyklaRH6Z%2BWu8qvbFxiuw%3D&k=RMfN%2B9pD%2FJCzPTIzPk%2Bpf0ThKPvI425hye4JqUxi3iA%3D&l=368&m=0&p=1&s=rb%2BrK0HsOYcPpTF6KkpuDWxh7scZbj74kVMHuwhgUR0%3D&v=1) (recommended: Brave Browser with Brave Shields disabled for the site) or - less adventurously - ask in the #developers channel in the xx Network Discord.
-
 
 ### License
 
