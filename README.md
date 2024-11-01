@@ -234,7 +234,7 @@ Other ways:
 
 ### License
 
-Tribler uses the socialist GPL 3.0 license so Tribler patch files such as `tribler.*.patch` that modify files from the Tribler repo are released under the same crappy license.
+Tribler uses the strict GPL 3.0 license so Tribler patch files such as `tribler.*.patch` that modify files from the Tribler repo are released under the same license.
 
 The rest is released under the permissive MIT License.
 
