@@ -2,6 +2,7 @@ services:
   tribler:
     # image: ghcr.io/tribler/tribler:latest
     image: tribler-haven:latest
+    container_name: "tribler"
     network_mode: host
     environment:
       CORE_API_PORT: 3100 
@@ -13,4 +14,4 @@ services:
     container_name: "haven"
     entrypoint: ["npm", "run", "start"]
     ports:
-      - "38080:3000"   
+      - "3000:3000"   

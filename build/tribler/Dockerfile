@@ -45,4 +45,6 @@ RUN pip3 install -r requirements.txt
 ENV PYTHONPATH=pyipv8
 
 # Run the application using Xvfb
-CMD xvfb-run python3 src/run_tribler.py
+# AA: containerized xvfb sometimes fails
+# CMD xvfb-run python3 src/run_tribler.py
+CMD xvfb-run --auto-servernum --server-num=1 python3 src/run_tribler.py

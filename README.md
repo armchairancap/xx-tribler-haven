@@ -1,6 +1,7 @@
 - [xx Network Haven - Tribler Proof-of-Concept](#xx-network-haven---tribler-proof-of-concept)
   - [Haven with Tribler iFrame (v2)](#haven-with-tribler-iframe-v2)
     - [Run in Docker](#run-in-docker)
+    - [Run outside of Docker](#run-outside-of-docker)
   - [Tribler with Haven iFrame (v1)](#tribler-with-haven-iframe-v1)
   - [How to run this thing](#how-to-run-this-thing)
   - [Other information](#other-information)
@@ -12,6 +13,7 @@
     - [Inconvenient navigation (v1)](#inconvenient-navigation-v1)
     - [Haven identity and space (channel) configuration (v1)](#haven-identity-and-space-channel-configuration-v1)
     - [Notifications (v1)](#notifications-v1)
+    - [Security (v2)](#security-v2)
     - [iFrame (v2, v1)](#iframe-v2-v1)
   - [Additional information](#additional-information)
   - [License](#license)
@@ -24,7 +26,7 @@ This repository contains several "proof-of-concept" ideas for xx Network Haven a
 - v2 - Haven chat with Tribler iFrame (**WIP** in `master` branch, later will become v2.0)
 - v1 - Tribler with Haven chat iFrame (source code in [Release v1.0](https://github.com/armchairancap/xx-tribler-haven/releases/tag/v1.0))
 
-v2 is probably more interesting to general users. [This post](https://armchairancap.github.io/blog/2024/10/29/xx-haven-with-tribler#what-integrations-and-why) has some advantages and disadvantages of each approach.
+v2 is probably more interesting to general users. [This post](https://armchairancap.github.io/blog/2024/10/29/xx-haven-with-tribler#what-integrations-and-why) talks about some advantages and disadvantages of each approach as I see them.
 
 A better way may be to integrate Tribler in Haven by using xxDK directly from Tribler.
 
@@ -34,19 +36,19 @@ A better way may be to integrate Tribler in Haven by using xxDK directly from Tr
 
 ![Haven with Tribler iFrame](./xx_screenshot_tribler_child_iframe.png)
 
-- (1) Join a private or public channel
-- (2) Copy Magnet link(s)
-- (3) Paste them to `+ Add torrent` > `Import torrent from magnet` in Tribler iFrame's 
+- (1) Join a private or public channel of your choosing or create one
+- (2) Copy Magnet link(s) (or paste them, to share your own)
+- (3) Paste them to `+ Add torrent` > `Import torrent from magnet` in Tribler iFrame
 
 What does this entail? Just two patches from this repo:
 
-- Add Tribler iframe to Haven (haven.patch)
-- Allow unauthenticated access to localhost and `haven` in Tribler's REST manager (tribler.patch)
-- Run Haven and Tribler on LAN
+- Add Tribler iframe to Haven (`build/haven/haven-DefaultLayout.tsx.patch`)
+- Allow unauthenticated access to localhost and `haven` in Tribler's REST manager (`build/tribler/tribler.patch`)
+- Build & run Haven and Tribler on LAN
 
 #### Run in Docker
 
-This isn't completely ready yet, but you may build the two containers by yourself like this:
+You may build the two containers by yourself like this:
 
 ```sh
 cd build/haven
@@ -67,13 +69,29 @@ tribler-haven        latest      8693940f6d6f   9 minutes ago    1.39GB
 haven-for-tribler    latest      d637b742a675   14 minutes ago   2.67GB
 ```
 
+Run with `cd build/tribler && docker compose up` and access Haven at http://localhost:3100. 
+
+Create a strong password when creating Haven identity and remember to [back it up](https://armchairancap.github.io/docs/speakeasy-user-guide/identity#backup-an-identity).
+
 There's a sample Docker compose file in the build/tribler directory. 
 
 By default - and the patch for Haven has that hardcoded - Tribler API port should be 3100 and the password 'changeme'. In this PoC that's hard-coded into the Haven patch, so if you want to change these you may edit the patches and Docker compose to match whatever password you set and port you want to use. 
 
-If you decide to change the API key, for example, you can do it in Tribler, then change compose.yaml, change the API key in it, change it in the Haven patch, and rebuild Haven container. I think that should be enough.
+If you decide to change the Tribler API key, for example, you can do it in Tribler UI, then quit Tribler, change the key in compose.yaml, rebuild Tribler container and start Tribler. That should be enough.
 
 For more advanced Docker compose scenarios (TLS, reverse proxy, etc.) you can consider Docker compose recipes I have published (see the Resources section).
+
+#### Run outside of Docker
+
+- Haven:
+  - Clone Haven source code and replace the `src/layouts/DefaultLayout/DefaultLayout.tsx` with `build/haven/patched-DefaultLayout.tsx`. Note that iFrame URL must point to hostname/IP and port where Tribler will be running.
+  - Edit `.env` in the root of Haven source code to redirect Haven invites to localhost:3000 or whatever your Haven will be running at.
+  - `npm run dev`
+- Tribler:
+  - Patch `src/tribler/core/restapi/rest_manager.py` with `build/tribler/tribler.patch`
+  - Build and run
+
+Key assumption is Haven and Tribler run on the same host. See the Dockerfiles for details.
 
 ### Tribler with Haven iFrame (v1)
 
@@ -195,9 +213,11 @@ If you want to share Haven to other users, though, remember they will have acces
 
 Also keep in mind that Tribler doesn't authenticate localhost users, so other users on the same computer could access Tribler's Web UI directly the same as you, by using the default API key ('changeme'). How to change that is described in How to Run (above).
 
+Also remember to check your privacy assumptions for Tribler by reading their documentation. Note that files seeded in Tribler can be found and downloaded by others. You may encrypt them before seeing, if that's what you need, but this PoC does not consider such use cases.
+
 #### iFrame (v2, v1)
 
-We should really use iFrames in the first place. But it's easy to do and v2 is also easy to use with some small security compromises.
+We shouldn't use iFrame in the first place. But it's easy to do and v2 is also easy to use with some very small security compromises.
 
 Other ways:
 
@@ -207,11 +227,16 @@ Other ways:
 
 ### Additional information 
 
-- [Developer section of the xx Network Web site](https://xx.network/developers-blockchain/)
+- [Learn about xx Network](https://learn.xx.network) - how it works, white paper pointers, etc.
 
-- You can talk to xx Network community and developers in [General Chat on Haven](http://haven.xx.network/join?0Name=xxGeneralChat&1Description=Talking+about+the+xx+network&2Level=Public&3Created=1674152234202224215&e=%2FqE8BEgQQkXC6n0yxeXGQjvyklaRH6Z%2BWu8qvbFxiuw%3D&k=RMfN%2B9pD%2FJCzPTIzPk%2Bpf0ThKPvI425hye4JqUxi3iA%3D&l=368&m=0&p=1&s=rb%2BrK0HsOYcPpTF6KkpuDWxh7scZbj74kVMHuwhgUR0%3D&v=1) (recommended: Brave Browser with Brave Shields disabled for the site) or - less adventurously - ask in the #developers channel in the xx Network Discord.
+- My [Haven User Guide](https://armchairancap.github.io/docs/category/xx-network-haven-users-guide). An **Admin** Guide can be found on the same site.
 
 - My notes for [containerized Haven (formerly Speakeasy) can be found here](https://github.com/armchairancap/xx-haven-container).
+
+- [Developer section of the xx Network Web site](https://xx.network/developers-blockchain/)
+
+- You can talk to xx Network community and developers in [General Chat on Haven](https://haven.xx.network/join?0Name=xxGeneralChat&1Description=Talking+about+the+xx+network&2Level=Public&3Created=1674152234202224215&e=%2FqE8BEgQQkXC6n0yxeXGQjvyklaRH6Z%2BWu8qvbFxiuw%3D&k=RMfN%2B9pD%2FJCzPTIzPk%2Bpf0ThKPvI425hye4JqUxi3iA%3D&l=368&m=0&p=1&s=rb%2BrK0HsOYcPpTF6KkpuDWxh7scZbj74kVMHuwhgUR0%3D&v=1) (recommended: Brave Browser with Brave Shields disabled for the site) or - less adventurously - ask in the #developers channel in the xx Network Discord.
+
 
 ### License
 

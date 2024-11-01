@@ -7,6 +7,7 @@ fi
 
 cd haven
 echo -e "\n=== Building Haven ===\n"
+echo -e "\nThis may take several minutes!\n"
 docker build -t haven-for-tribler:latest .
 
 cd ../tribler
@@ -26,6 +27,9 @@ vim compose.yaml
 mkdir tribler-downloads
 docker compose up
 
-After the container is up, you can access Haven at http://localhost:3000 and see a Tribler iFrame on the same page.
-If you change CORE_API_KEY, you need to set the same password in the Haven patch, and rebuild Haven container.
+After the container is up, you can access Haven at http://localhost:3000 
+and see a Tribler iFrame on the same page.
+
+If you change CORE_API_KEY, you need to set the same password in the Haven patch, 
+and rebuild & restart Haven container.
 '''

@@ -8,7 +8,7 @@
 +        Skips checks for requests to the documentation, static files, or the UI, and also for localhost or the haven domain.
          """
 -        if any(request.path.startswith(path) for path in ["/docs", "/static", "/ui"]):
-+        if any(request.path.startswith(path) for path in ["/docs", "/static", "/ui"]) or request.remote != "127.0.0.1" or request.host != 'haven':
++        if any(request.path.startswith(path) for path in ["/docs", "/static", "/ui"]) or request.remote != "127.0.0.1" or request.host != 'haven' != 'tribler':
 +            print("===> Request host and IP: ", request.host, request.remote)
              return True
          # The api key can either be in the headers or as part of the url query
