@@ -23,8 +23,8 @@
 
 This repository contains several "proof-of-concept" ideas for xx Network Haven and Tribler integrations.
 
-- v2 - Haven chat with Tribler iFrame (**WIP** in `master` branch, later will become v2.0)
-- v1 - Tribler with Haven chat iFrame (source code in [Release v1.0](https://github.com/armchairancap/xx-tribler-haven/releases/tag/v1.0))
+- [v2](https://github.com/armchairancap/xx-tribler-haven/releases) - Haven chat with Tribler iFrame (**WIP** in `master` branch, later will become v2.0)
+- [v1](https://github.com/armchairancap/xx-tribler-haven/releases/tag/v1.0) - Tribler with Haven chat iFrame (source code in [Release v1.0](https://github.com/armchairancap/xx-tribler-haven/releases/tag/v1.0))
 
 v2 is probably more interesting to general users. [This post](https://armchairancap.github.io/blog/2024/10/29/xx-haven-with-tribler#what-integrations-and-why) talks about some advantages and disadvantages of each approach as I see them.
 
