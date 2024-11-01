@@ -70,7 +70,7 @@ haven-for-tribler    latest      d637b742a675   14 minutes ago   2.67GB
 
 Run with `cd build/tribler && docker compose up` and access Haven at http://localhost:3100. 
 
-Create a strong password when creating Haven identity and remember to [back it up](https://armchairancap.github.io/docs/speakeasy-user-guide/identity#backup-an-identity).
+Create a strong password when creating Haven identity and remember to [back it up](https://armchairancap.github.io/docs/haven-user-guide/identity#backup-an-identity).
 
 There's a sample Docker compose file in the build/tribler directory. 
 
