@@ -1,0 +1,25 @@
+--- src/layouts/DefaultLayout/DefaultLayout.tsx	2024-11-01 13:01:54.179135359 +0800
++++ /home/sean/code/tribler-source/build/haven/patched-DefaultLayout.tsx	2024-11-01 14:43:45.650284225 +0800
+@@ -87,13 +87,21 @@
+             <LeftSideBar className='overflow-y-auto' />
+             <div className='overflow-hidden flex flex-col items-stretch'>
+               <div className='flex h-full'>
+-                <div className='flex flex-col flex-grow'>
++                <div className='flex flex-col flex-grow w-1/2'>
+                   <Notices />
+                   {sidebarView === 'spaces' && <PinnedMessage />}
+                   {sidebarView === 'settings' && <SettingsView />}
+                   {(sidebarView === 'spaces' || sidebarView === 'dms') && <>{children}</>}
+                 </div>
+                 <RightSideBar />
++                <div className='flex-grow h-screen w-1/2 h-screen'>
++                  <iframe
++                    src='http://tribler:3100/'
++                    title='Tribler UI'
++                    sandbox='allow-same-origin allow-scripts'
++                    style={{ width: '100%', height: '100%' }}
++                  />
++                </div>
+               </div>
+             </div>
+           </div>
