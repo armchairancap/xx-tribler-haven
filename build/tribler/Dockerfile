@@ -27,9 +27,10 @@ RUN echo "Cloning $GIT_REPO on branch $GIT_BRANCH"
 # RUN git remote add origin "$GIT_REPO"
 RUN git clone --recursive --branch "$GIT_BRANCH" "$GIT_REPO" /home/user/tribler
 
-# AA: Commit up to which we patch; https://github.com/Tribler/tribler/commit/d963b26b9d3f8a996ad88c7394273418b17dae53
-ARG GIT_COMMIT_SHA="d963b26b9d3f8a996ad88c7394273418b17dae53"
-# AA: patch Tribler to allow access from localhost (127.0.0.1) and haven
+# AA - v8.0.6 + small files: https://github.com/Tribler/tribler/commit/0a2742cf66070e3f206edddd6657d87e234092ef 
+ARG GIT_COMMIT_SHA="0a2742cf66070e3f206edddd6657d87e234092ef"
+
+# AA: patch Tribler to allow access from localhost (127.0.0.1) and Haven
 ADD tribler.patch tribler.patch
 RUN git reset --hard ${GIT_COMMIT_SHA} && cd /home/user/tribler/src/tribler/core/restapi/ && patch --backup-if-mismatch /home/user/tribler/src/tribler/core/restapi/rest_manager.py /home/user/tribler/tribler.patch
 
