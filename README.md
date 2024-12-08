@@ -20,14 +20,16 @@
 
 ## xx Network Haven - Tribler Proof-of-Concept
 
-This repository contains several "proof-of-concept" ideas for [xx Network]((https://xx.network)) [Haven](https://haven.xx.network) and [Tribler](https://github.com/Tribler/tribler) integrations.
+This repository contains two "proof-of-concept" ideas for [xx Network]((https://xx.network)) [Haven](https://haven.xx.network) and [Tribler](https://github.com/Tribler/tribler) integrations.
 
 - [v2](https://github.com/armchairancap/xx-tribler-haven/releases) - Haven chat with a Tribler iFrame (recommended)
 - [v1](https://github.com/armchairancap/xx-tribler-haven/releases/tag/v1.0) - Tribler with a Haven chat iFrame (source code in [Release v1.0](https://github.com/armchairancap/xx-tribler-haven/releases/tag/v1.0))
 
 v2 is probably more interesting to general users. [This post](https://armchairancap.github.io/blog/2024/10/29/xx-haven-with-tribler#what-integrations-and-why) talks about some advantages and disadvantages of each approach as I see them.
 
-A seamless way to natively integrate Haven in Tribler could be achieved by using xxDK from Tribler so that Haven runs within Tribler, but that's beyond my abilities and would require more extensive patching that would also be harder to maintain and review.
+A seamless way to natively integrate Haven in Tribler could be achieved by using xxDK from Tribler so that Haven runs within Tribler, but that's beyond my abilities and would require more extensive patching that would also be harder to maintain and review the patches.
+
+The approach v2 is extremely simple and easy to review (see the patches) for security and other concerns.
 
 ### Haven with Tribler iFrame (v2)
 
