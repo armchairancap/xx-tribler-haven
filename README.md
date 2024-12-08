@@ -132,10 +132,10 @@ What does this approach involve?
 Haven provides privacy to Tribler users (and vice versa):
 
 - You don't have to use Tor to privately obtain Magnet links. As Tribler doesn't use Tor either, it's a Tor-free experience
-- All chats are private and confidential (Post-Quantum End-to-End Encryption mixed with xx Network's cMixx mixnet)
+- All chats are private and confidential (Post-Quantum Cryptography and End-to-End Encryption with messages mixed using xx Network's cMixx mixnet)
 - Your Haven identity is private and no registration is required
-- There's no telemetry, adds or anything like that
-- Gratis & open source
+- There's no telemetry, ads or anything like that
+- Gratis & permissive Open Source code
 
 #### Simplify copy-paste operations
 
