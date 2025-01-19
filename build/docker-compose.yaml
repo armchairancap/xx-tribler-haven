@@ -1,0 +1,27 @@
+services:
+  tribler:
+    build:
+      context: ./tribler
+      dockerfile: Dockerfile
+    image: tribler-haven:latest
+    container_name: "tribler"
+    network_mode: host
+    # NOTE: to directly access Tribler (w/o Haven) from localhost, 
+    # disable host mode above, and expose port 3100 as shown below:
+    #ports:
+    #  - "3100:3100"
+    environment:
+      CORE_API_PORT: 3100 
+      CORE_API_KEY: "changeme"
+    volumes:
+      - ./tribler-downloads:/home/user/Downloads
+      - ./tribler:/home/user/.Tribler
+  haven:
+    build:
+      context: ./haven
+      dockerfile: Dockerfile  
+    image: haven-for-tribler:latest
+    container_name: "haven"
+    entrypoint: ["npm", "run", "start"]
+    ports:
+      - "3000:3000"   

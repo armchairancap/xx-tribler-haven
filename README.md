@@ -13,6 +13,7 @@
     - [Haven identity and space (channel) configuration (v1)](#haven-identity-and-space-channel-configuration-v1)
     - [Notifications (v1)](#notifications-v1)
     - [Security (v2)](#security-v2)
+      - [How do Haven and Tribler limit access](#how-do-haven-and-tribler-limit-access)
     - [iFrame (v2, v1)](#iframe-v2-v1)
   - [Additional information](#additional-information)
   - [License](#license)
@@ -52,11 +53,9 @@ What does this entail? Just two patches from this repo:
 You may build the two containers by yourself like this:
 
 ```sh
-cd build/haven
-docker build -t haven-for-tribler:latest .
-cd ../tribler
-docker build -t tribler-haven:latest .
-cd ../../
+cd build/
+docker compose build tribler-haven tribler
+docker compose build haven-for-tribler haven
 ```
 
 Or you can do `cd build && ./build.sh` (which does the same thing).
@@ -70,7 +69,9 @@ tribler-haven        latest      8693940f6d6f   9 minutes ago    1.39GB
 haven-for-tribler    latest      d637b742a675   14 minutes ago   2.67GB
 ```
 
-Run with `cd build/tribler && docker compose up` and access Haven at http://localhost:3000. 
+Run with `docker compose up` and access Haven at http://localhost:3000. 
+
+**NOTE:** for direct access to Tribler, please see Security, below.
 
 Create a strong password when creating Haven identity and remember to [back it up](https://armchairancap.github.io/docs/haven-user-guide/identity#backup-an-identity).
 
@@ -162,7 +163,7 @@ In other cases you may want to sign your post from a wallet address (example 3),
 
 ![Verify signature](./xx_screenshot_sign_approaches.png)
 
-An even more elaborate example is example 4, where the poster signed both their Haven identity and Magnet link. What's the difference? In (3) we know the Magnet link was signed by a certain xx Network wallet address, but not if noviceDrippySquid is copy-pasting that crap, or sharing himself. 
+An even more elaborate example is example 4, where the poster signed both their Haven identity and Magnet link. What's the difference? In (3) we know the Magnet link was signed by *a* certain xx Network wallet address, but not if noviceDrippySquid is copy-pasting that crap from elsewhere, or sharing it himself from specific xx Network (or other, whereever it was signed) wallet.
 
 In (4) we have the proof that the xx Wallet address owner is behind the noviceDrippySquid identity in Haven. 
 
@@ -212,7 +213,7 @@ This could be worked around, but I haven't tried it.
 
 #### Security (v2)
 
-In v2 Tribler allows unauthenticated access to port 3100 from 127.0.0.1 and `haven`, which is a small compromise that I found reasonable for this PoC.
+In v2 Tribler allows unauthenticated access to port 3100 from 127.0.0.1 and `haven`, which is a small compromise that I found reasonable for this PoC. 
 
 If you want to share Haven to other users, though, remember they will have access to the same Tribler instance, so do not share the same Haven to friends or family if that's not what you intend. You can easily create additional containerized Haven instances for them - just use my generic containerized Haven recipe (see Resources) to provide access to shared unpatched Haven server over TLS to port 443, and you'll be fine.
 
@@ -220,9 +221,19 @@ Also keep in mind that Tribler doesn't authenticate localhost users, so other us
 
 Also remember to check your privacy assumptions for Tribler by reading their documentation. Note that files seeded in Tribler can be found and downloaded by others. You may encrypt them before seeing, if that's what you need, but this PoC does not consider such use cases.
 
+As an aside, I've seen some people in the Trible community asking for other "popular" chat app integrations. If your chat reveals users' metadata (such as IP addresses), why even bother using Tribler? You can pay for a VPN and be done with it.
+
+##### How do Haven and Tribler limit access
+
+Considering that my patch removes Tribler's API authentication, does that mean anyone can access it?
+
+No, if you look at the patch in ./build/tribler, you'll see it allows direct access only to localhost, so it's secure on single user systems. 
+
+But if you change Docker network from `host` to `bridge` and also expose port 3100, then it may be accessible over LAN which is a different story, and for that use case we should better add a reverse TLS proxy with authentication than expose Tribler itself. 
+
 #### iFrame (v2, v1)
 
-We shouldn't use iFrame in the first place. But it's easy to do and v2 is also easy to use with some very small security compromises.
+We shouldn't use iFrame in the first place. But it's easy to do and v2 is also easy to use with some very small security compromises. *Theoretically* the parent frame could impact the child frame, but the patches are tiny and easy to review.
 
 Other ways:
 

@@ -7,7 +7,13 @@ dist/
 output/
 screenshots/
 tribler.dist-info
+tribler/__pycache__/
+tribler/gui/__pycache__/
+tribler/core/__pycache__/
+haven/haven-source
 
+build/tribler/tribler-source
+build/haven/haven-source
 src/tribler/run.py
 src/ec_multichain.pem
 src/secondary_key.pem
